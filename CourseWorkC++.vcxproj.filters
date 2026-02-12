@@ -15,39 +15,39 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CourseWorkC++.cpp">
+    <ClCompile Include="src\CourseWorkC++.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Book.cpp">
+    <ClCompile Include="src\Book.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="RecordBook.cpp">
+    <ClCompile Include="src\RecordBook.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Subject.cpp">
+    <ClCompile Include="src\Subject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="UdcCode.cpp">
+    <ClCompile Include="src\UdcCode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SemesterBook.cpp">
+    <ClCompile Include="src\SemesterBook.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Book.h">
+    <ClInclude Include="src\Book.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="RecordBook.h">
+    <ClInclude Include="src\RecordBook.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Subject.h">
+    <ClInclude Include="src\Subject.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="UdcCode.h">
+    <ClInclude Include="src\UdcCode.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="SemesterBook.h">
+    <ClInclude Include="src\SemesterBook.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

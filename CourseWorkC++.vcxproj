@@ -127,19 +127,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Book.cpp" />
-    <ClCompile Include="CourseWorkC++.cpp" />
-    <ClCompile Include="RecordBook.cpp" />
-    <ClCompile Include="SemesterBook.cpp" />
-    <ClCompile Include="Subject.cpp" />
-    <ClCompile Include="UdcCode.cpp" />
+    <ClCompile Include="src\Book.cpp" />
+    <ClCompile Include="src\CourseWorkC++.cpp" />
+    <ClCompile Include="src\RecordBook.cpp" />
+    <ClCompile Include="src\SemesterBook.cpp" />
+    <ClCompile Include="src\Subject.cpp" />
+    <ClCompile Include="src\UdcCode.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Book.h" />
-    <ClInclude Include="SemesterBook.h" />
-    <ClInclude Include="Subject.h" />
-    <ClInclude Include="RecordBook.h" />
-    <ClInclude Include="UdcCode.h" />
+    <ClInclude Include="src\Book.h" />
+    <ClInclude Include="src\SemesterBook.h" />
+    <ClInclude Include="src\Subject.h" />
+    <ClInclude Include="src\RecordBook.h" />
+    <ClInclude Include="src\UdcCode.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
