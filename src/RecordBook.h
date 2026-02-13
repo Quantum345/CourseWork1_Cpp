@@ -1,7 +1,6 @@
 #pragma once
 #include "Book.h"
 #include "Subject.h"
-#include <vector>
 
 class RecordBook :
     public Book
