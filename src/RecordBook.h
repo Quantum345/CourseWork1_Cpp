@@ -6,12 +6,12 @@ class RecordBook :
     public Book
 {
 private:
-    unsigned int course;
+    unsigned int academicYear;
     Subject* subjects;
     unsigned int subjectsAmount;
 public:
     RecordBook();
-    RecordBook(unsigned int course);
+    RecordBook(unsigned int academicYear);
     RecordBook(const RecordBook& rb);
     RecordBook(RecordBook&& rb);
     ~RecordBook();
@@ -19,9 +19,9 @@ public:
     RecordBook& operator=(const RecordBook&);
     RecordBook& operator=(RecordBook&&);
 
-    void setCourse(unsigned int course);
+    void setAcademicYear(unsigned int academicYear);
     
-    unsigned int getCourse();
+    unsigned int getAcademicYear();
     unsigned int getSubjectsAmount();
 };
 
