@@ -9,7 +9,7 @@ UdcCode::UdcCode(const std::string& code) : code(code)
 UdcCode::UdcCode(const UdcCode& udcCode) : code(udcCode.code)
 {}
 
-UdcCode::UdcCode(UdcCode&& udcCode) : code(std::move(udcCode.code))
+UdcCode::UdcCode(UdcCode&& udcCode) noexcept : code(std::move(udcCode.code))
 {}
 
 UdcCode::~UdcCode()
@@ -24,7 +24,7 @@ UdcCode& UdcCode::operator=(const UdcCode& udcCode)
     return *this;
 }
 
-UdcCode& UdcCode::operator=(UdcCode&& udcCode)
+UdcCode& UdcCode::operator=(UdcCode&& udcCode) noexcept
 {
     if (this != &udcCode)
     {

@@ -9,11 +9,11 @@ public:
     UdcCode();
     UdcCode(const std::string& code);
     UdcCode(const UdcCode& udcCode);
-    UdcCode(UdcCode&& udcCode);
+    UdcCode(UdcCode&& udcCode) noexcept;
     ~UdcCode();
 
     UdcCode& operator=(const UdcCode& udcCode);
-    UdcCode& operator=(UdcCode&& udcCode);
+    UdcCode& operator=(UdcCode&& udcCode) noexcept;
 
     void setUdcCode(const std::string& code);
 
