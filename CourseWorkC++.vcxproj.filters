@@ -50,5 +50,8 @@
     <ClInclude Include="src\SemesterBook.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\MyContainer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
