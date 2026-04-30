@@ -1,13 +1,13 @@
 #pragma once
 #include <string>
+#include <iostream>
 
-class UdcCode
-{
+class UdcCode {
 private:
     std::string code;
 public:
     UdcCode();
-    UdcCode(const std::string& code);
+    explicit UdcCode(const std::string& code);
     UdcCode(const UdcCode& udcCode);
     UdcCode(UdcCode&& udcCode) noexcept;
     ~UdcCode();
@@ -17,9 +17,8 @@ public:
 
     void setUdcCode(const std::string& code);
 
-    std::string getUdcCode();
+    std::string getUdcCode() const;
 
     friend std::istream& operator>>(std::istream& is, UdcCode& udcCode);
     friend std::ostream& operator<<(std::ostream& os, const UdcCode& udcCode);
 };
-
