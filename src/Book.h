@@ -1,17 +1,18 @@
 #pragma once
 #include "UdcCode.h"
 #include <string>
-class Book
-{
+#include <iostream>
+
+class Book {
 private:
-    UdcCode* udcCode;
+    UdcCode udcCode;
     std::string author;
     std::string name;
     std::string publishingHouse;
-    unsigned int year;
+    unsigned int year{};
 public:
 
-    Book() = default;
+    Book();
 
     Book(
         const UdcCode& udcCode,
@@ -22,13 +23,13 @@ public:
 
     Book(const Book& b);
 
-    Book(Book&& b);
+    Book(Book&& b) noexcept;
 
-    ~Book();
+    virtual ~Book();
 
     Book& operator=(const Book& b);
 
-    Book& operator=(Book&& b);
+    Book& operator=(Book&& b) noexcept;
 
     Book& operator()(
         const UdcCode& udcCode,
