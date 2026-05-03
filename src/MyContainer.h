@@ -13,7 +13,7 @@ public:
     MyContainer(T* input, std::size_t size) noexcept : data(input), capacity(size) {}
 
     template <bool IsConst>
-    class MyIteratorImpl {
+    class MyIterator {
     public:
         using value_type = T;
         using difference_type = std::ptrdiff_t;
@@ -21,8 +21,8 @@ public:
         using pointer = std::conditional_t<IsConst, const T*, T*>;
         using reference = std::conditional_t<IsConst, const T&, T&>;
 
-        constexpr MyIteratorImpl() noexcept : m_ptr(nullptr) {}
-        constexpr explicit MyIteratorImpl(pointer ptr) noexcept : m_ptr(ptr) {}
+        constexpr MyIterator() noexcept : m_ptr(nullptr) {}
+        constexpr explicit MyIterator(pointer ptr) noexcept : m_ptr(ptr) {}
 
         constexpr reference operator*() const noexcept {
             return *m_ptr;
@@ -31,46 +31,46 @@ public:
             return m_ptr;
         }
 
-        constexpr MyIteratorImpl& operator++() noexcept {
+        constexpr MyIterator& operator++() noexcept {
             ++m_ptr;
             return *this;
         }
-        constexpr MyIteratorImpl& operator--() noexcept {
+        constexpr MyIterator& operator--() noexcept {
             --m_ptr;
             return *this;
         }
 
-        constexpr MyIteratorImpl operator++(int) noexcept {
-            MyIteratorImpl tmp = *this;
+        constexpr MyIterator operator++(int) noexcept {
+            MyIterator tmp = *this;
             ++(*this);
             return tmp;
         }
-        constexpr MyIteratorImpl operator--(int) noexcept {
-            MyIteratorImpl tmp = *this;
+        constexpr MyIterator operator--(int) noexcept {
+            MyIterator tmp = *this;
             --(*this);
             return tmp;
         }
 
-        constexpr MyIteratorImpl operator+(difference_type n) const noexcept { return MyIteratorImpl(m_ptr + n); }
-        constexpr MyIteratorImpl operator-(difference_type n) const noexcept { return MyIteratorImpl(m_ptr - n); }
-        constexpr difference_type operator-(const MyIteratorImpl& other) const noexcept { return m_ptr - other.m_ptr; }
-        constexpr MyIteratorImpl& operator+=(difference_type n) noexcept { m_ptr += n; return *this; }
-        constexpr MyIteratorImpl& operator-=(difference_type n) noexcept { m_ptr -= n; return *this; }
+        constexpr MyIterator operator+(difference_type n) const noexcept { return MyIterator(m_ptr + n); }
+        constexpr MyIterator operator-(difference_type n) const noexcept { return MyIterator(m_ptr - n); }
+        constexpr difference_type operator-(const MyIterator& other) const noexcept { return m_ptr - other.m_ptr; }
+        constexpr MyIterator& operator+=(difference_type n) noexcept { m_ptr += n; return *this; }
+        constexpr MyIterator& operator-=(difference_type n) noexcept { m_ptr -= n; return *this; }
         constexpr reference operator[](difference_type n) const noexcept { return m_ptr[n]; }
 
-        friend constexpr bool operator==(const MyIteratorImpl& a, const MyIteratorImpl& b) noexcept { return a.m_ptr == b.m_ptr; }
-        friend constexpr bool operator!=(const MyIteratorImpl& a, const MyIteratorImpl& b) noexcept { return a.m_ptr != b.m_ptr; }
-        friend constexpr bool operator<(const MyIteratorImpl& a, const MyIteratorImpl& b) noexcept { return a.m_ptr < b.m_ptr; }
-        friend constexpr bool operator<=(const MyIteratorImpl& a, const MyIteratorImpl& b) noexcept { return a.m_ptr <= b.m_ptr; }
-        friend constexpr bool operator>(const MyIteratorImpl& a, const MyIteratorImpl& b) noexcept { return a.m_ptr > b.m_ptr; }
-        friend constexpr bool operator>=(const MyIteratorImpl& a, const MyIteratorImpl& b) noexcept { return a.m_ptr >= b.m_ptr; }
+        friend constexpr bool operator==(const MyIterator& a, const MyIterator& b) noexcept { return a.m_ptr == b.m_ptr; }
+        friend constexpr bool operator!=(const MyIterator& a, const MyIterator& b) noexcept { return a.m_ptr != b.m_ptr; }
+        friend constexpr bool operator<(const MyIterator& a, const MyIterator& b) noexcept { return a.m_ptr < b.m_ptr; }
+        friend constexpr bool operator<=(const MyIterator& a, const MyIterator& b) noexcept { return a.m_ptr <= b.m_ptr; }
+        friend constexpr bool operator>(const MyIterator& a, const MyIterator& b) noexcept { return a.m_ptr > b.m_ptr; }
+        friend constexpr bool operator>=(const MyIterator& a, const MyIterator& b) noexcept { return a.m_ptr >= b.m_ptr; }
 
     private:
         pointer m_ptr;
     };
 
-    using iterator = MyIteratorImpl<false>;
-    using const_iterator = MyIteratorImpl<true>;
+    using iterator = MyIterator<false>;
+    using const_iterator = MyIterator<true>;
 
     constexpr iterator begin() noexcept { return iterator(data); }
     constexpr iterator end() noexcept { return iterator(data + capacity); }
