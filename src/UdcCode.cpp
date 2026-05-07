@@ -38,13 +38,11 @@ std::istream& operator>>(std::istream& is, UdcCode& udcCode) {
     std::string classTag;
     std::string code;
 
-    if (!(is >> classTag) || classTag != "UdcCode") {
+    if (!(is >> classTag >> std::quoted(code))
+        || classTag != "UdcCode") {
         is.setstate(std::ios::failbit);
         return is;
     }
-
-    if (!(is >> std::quoted(code)))
-        return is;
 
     udcCode.setUdcCode(code);
     return is;

@@ -14,12 +14,11 @@ public:
 
     Book();
 
-    Book(
-        const UdcCode& udcCode,
-        const std::string& author,
-        const std::string& name,
-        const std::string& publishingHouse,
-        unsigned int year);
+    Book(const UdcCode& udcCode,
+         const std::string& author,
+         const std::string& name,
+         const std::string& publishingHouse,
+         unsigned int year);
 
     Book(const Book& b);
 

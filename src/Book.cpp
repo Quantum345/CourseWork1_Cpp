@@ -119,24 +119,10 @@ std::istream& operator>>(std::istream& is, Book& b) {
     std::string publishingHouse;
     unsigned int year = 0;
 
-    if (!(is >> classTag) || classTag != "Book") {
-        is.setstate(std::ios::failbit);
-        return is;
-    }
-
-    if (!(is >> b.udcCode))
-        return is;
-
-    if (!(is >> std::quoted(author)))
-        return is;
-
-    if (!(is >> std::quoted(name)))
-        return is;
-
-    if (!(is >> std::quoted(publishingHouse)))
-        return is;
-
-    if (!(is >> year)) {
+    if (!(is >> classTag >> b.udcCode
+          >> std::quoted(author) >> std::quoted(name)
+          >> std::quoted(publishingHouse) >> year)
+        || classTag != "Book") {
         is.setstate(std::ios::failbit);
         return is;
     }

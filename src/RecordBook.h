@@ -12,9 +12,7 @@ private:
     std::string university;
     unsigned int startYear = 0;
     unsigned int academicYear = 0;
-    Subject* subjects = nullptr;
-    size_t subjectsAmount = 0;
-    MyContainer<Subject>* iter = nullptr;
+    MyContainer<Subject> subjects{};
 public:
     RecordBook() = default;
     RecordBook(
@@ -50,9 +48,12 @@ public:
     std::string getUniversity() const;
     unsigned int getAcademicYear() const;
     size_t getSubjectsAmount() const;
-    Subject* getSubjects() const;
+    MyContainer<Subject> getSubjects() const;
     float getRating() const;
-    int getSubjectGrade(std::string subjectName) const;
+    int getSubjectGrade(const std::string& subjectName) const;
+
+    void addSubject(const Subject&);
+    void addSubject(Subject&&);
 
     friend std::istream& operator>>(std::istream& is, RecordBook& rb);
     friend std::ostream& operator<<(std::ostream& os, const RecordBook& rb);

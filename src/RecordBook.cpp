@@ -6,7 +6,7 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
-#include <algorithm>
+#include <utility>
 
 RecordBook::RecordBook(
     const std::string& student,
@@ -20,11 +20,7 @@ student(student),
 university(university),
 startYear(startYear),
 academicYear(academicYear),
-subjects(new Subject[subjectsAmount]),
-subjectsAmount(subjectsAmount) {
-    std::copy(subjects, subjects + subjectsAmount, this->subjects);
-    iter = new MyContainer<Subject>(this->subjects, this->subjectsAmount);
-}
+subjects(subjects, subjectsAmount) {}
 
 RecordBook::RecordBook(
     const Book& b,
@@ -39,11 +35,7 @@ student(student),
 university(university),
 startYear(startYear),
 academicYear(academicYear),
-subjects(new Subject[subjectsAmount]),
-subjectsAmount(subjectsAmount) {
-    std::copy(subjects, subjects + subjectsAmount, this->subjects);
-    iter = new MyContainer<Subject>(this->subjects, this->subjectsAmount);
-}
+subjects(subjects, subjectsAmount) {}
 
 RecordBook::RecordBook(const RecordBook& rb)
     : Book(rb),
@@ -51,55 +43,36 @@ RecordBook::RecordBook(const RecordBook& rb)
     university(rb.university),
     startYear(rb.startYear),
     academicYear(rb.academicYear),
-    subjects(new Subject[rb.subjectsAmount]),
-    subjectsAmount(rb.subjectsAmount) {
-    std::copy(rb.subjects, rb.subjects + rb.subjectsAmount, this->subjects);
-    iter = new MyContainer<Subject>(this->subjects, this->subjectsAmount);
-}
+    subjects(rb.subjects) {}
 
 RecordBook::RecordBook(RecordBook&& rb) noexcept
     : Book(rb),
+    student(std::move(rb.student)),
+    university(std::move(rb.university)),
+    startYear(rb.startYear),
     academicYear(rb.academicYear),
-    subjects(rb.subjects),
-    subjectsAmount(rb.subjectsAmount),
-    iter(rb.iter) {
-    rb.subjects = nullptr;
-    rb.subjectsAmount = 0;
-    rb.iter = nullptr;
-}
+    subjects(std::move(rb.subjects)) {}
 
-RecordBook::~RecordBook() {
-    delete this->iter;
-    delete[] subjects;
-}
+RecordBook::~RecordBook() = default;
 
 RecordBook& RecordBook::operator=(const RecordBook& rb) {
     if (this != &rb) {
-        delete this->iter;
-        delete[] subjects;
-
+        student = rb.student;
+        university = rb.university;
+        startYear = rb.startYear;
         academicYear = rb.academicYear;
-        subjects = new Subject[rb.subjectsAmount];
-        subjectsAmount = rb.subjectsAmount;
-        std::copy(rb.subjects, rb.subjects + rb.subjectsAmount, this->subjects);
-        iter = new MyContainer<Subject>(this->subjects, this->subjectsAmount);
+        subjects = rb.subjects;
     }
     return *this;
 }
 
 RecordBook& RecordBook::operator=(RecordBook&& rb) noexcept {
     if (this != &rb) {
-        delete this->iter;
-        delete[] subjects;
-
+        student = std::move(rb.student);
+        university = std::move(rb.university);
+        startYear = rb.startYear;
         academicYear = rb.academicYear;
-        subjects = rb.subjects;
-        subjectsAmount = rb.subjectsAmount;
-        iter = rb.iter;
-
-        rb.subjects = nullptr;
-        rb.subjectsAmount = 0;
-        rb.iter = nullptr;
+        subjects = std::move(rb.subjects);
     }
     return *this;
 }
@@ -133,25 +106,33 @@ unsigned int RecordBook::getAcademicYear() const {
 }
 
 size_t RecordBook::getSubjectsAmount() const {
-    return this->subjectsAmount;
+    return this->subjects.getSize();
 }
 
-Subject* RecordBook::getSubjects() const {
+MyContainer<Subject> RecordBook::getSubjects() const {
     return this->subjects;
 }
 
 float RecordBook::getRating() const {
     int sum = 0;
-    for (const auto& s : *iter)
+    for (const auto& s : subjects)
         sum += s.getGrade();
-    return (float)sum / this->subjectsAmount;
+    return (float)sum / this->subjects.getSize();
 }
 
-int RecordBook::getSubjectGrade(std::string subjectName) const {
-    for (const auto& s : *iter)
+int RecordBook::getSubjectGrade(const std::string& subjectName) const {
+    for (const auto& s : subjects)
         if (subjectName == s.getName())
             return s.getGrade();
     return -1;
+}
+
+void RecordBook::addSubject(const Subject& s) {
+    subjects.add(s);
+}
+
+void RecordBook::addSubject(Subject&& s) {
+    subjects.add(std::move(s));
 }
 
 std::istream& operator>>(std::istream& is, RecordBook& rb) {
@@ -160,55 +141,21 @@ std::istream& operator>>(std::istream& is, RecordBook& rb) {
     std::string university;
     unsigned int startYear = 0;
     unsigned int academicYear = 0;
-    size_t subjectsAmount = 0;
+    MyContainer<Subject> subjects;
 
-    if (!(is >> classTag) || classTag != "RecordBook") {
+    if (!(is >> classTag >> static_cast<Book&>(rb)
+          >> std::quoted(student) >> std::quoted(university)
+          >> startYear >> academicYear >> subjects)
+        || classTag != "RecordBook") {
         is.setstate(std::ios::failbit);
         return is;
     }
 
-    if (!(is >> static_cast<Book&>(rb)))
-        return is;
-
-    if (!(is >> std::quoted(student)))
-        return is;
-
-    if (!(is >> std::quoted(university)))
-        return is;
-
-    if (!(is >> startYear))
-        return is;
-
-    if (!(is >> academicYear))
-        return is;
-
-    if (!(is >> subjectsAmount))
-        return is;
-
-    Subject* newSubjects = nullptr;
-    if (subjectsAmount > 0)
-        newSubjects = new Subject[subjectsAmount];
-
-    for (size_t i = 0; i < subjectsAmount; ++i) {
-        if (!(is >> newSubjects[i])) {
-            delete[] newSubjects;
-            is.setstate(std::ios::failbit);
-            return is;
-        }
-    }
-
-    delete[] rb.subjects;
-    delete rb.iter;
-    rb.student = student;
-    rb.university = university;
+    rb.student = std::move(student);
+    rb.university = std::move(university);
     rb.academicYear = startYear;
     rb.academicYear = academicYear;
-    rb.subjects = newSubjects;
-    rb.subjectsAmount = subjectsAmount;
-    if (rb.subjects == nullptr || rb.subjectsAmount == 0)
-        rb.iter = nullptr;
-    else
-        rb.iter = new MyContainer<Subject>(rb.subjects, rb.subjectsAmount);
+    rb.subjects = std::move(subjects);
     return is;
 }
 
@@ -218,10 +165,6 @@ std::ostream& operator<<(std::ostream& os, const RecordBook& rb) {
         << std::quoted(rb.university) << ' '
         << rb.startYear << ' '
         << rb.academicYear << ' '
-        << rb.subjectsAmount;
-    if (rb.subjectsAmount == 0 || rb.iter == nullptr)
-        return os;
-    for (auto const& s : *rb.iter)
-        os << ' ' << s;
+        << rb.subjects;
     return os;
 }
