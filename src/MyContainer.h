@@ -149,12 +149,12 @@ public:
     constexpr const T& operator[](std::size_t i) const noexcept { return data[i]; }
 
     constexpr T& at(std::size_t i) {
-        if (i >= capacity)
+        if (i >= size)
             throw std::out_of_range("Out of Range Error: index extends beyond the container's size");
         return data[i];
     }
     constexpr const T& at(std::size_t i) const {
-        if (i >= capacity)
+        if (i >= size)
             throw std::out_of_range("Out of Range Error: index extends beyond the container's size");
         return data[i];
     }
