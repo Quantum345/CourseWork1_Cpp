@@ -6,6 +6,7 @@
 #include <type_traits>
 #include <utility>
 #include <string>
+#include <exception>
 
 template <typename T>
 class MyContainer {
@@ -14,9 +15,9 @@ private:
     std::size_t size = 0;
     std::size_t capacity = 0;
 
-    constexpr void _reallocate() {
+    void _reallocate() {
         if (data == nullptr) {
-            data = new T[++capacity];
+            data = new T[++capacity]{};
             return;
         }
         size_t newCapacity = capacity * 2;
@@ -27,44 +28,43 @@ private:
         capacity = newCapacity;
         tmp = nullptr;
     }
+
 public:
     MyContainer() = default;
-    MyContainer(const T* input, std::size_t inputSize) : size(inputSize), capacity(inputSize) {
+    MyContainer(const T* input, std::size_t inputSize)
+        : size(inputSize), capacity(inputSize) {
         data = new T[capacity]{};
-        std::copy(input, input + inputSize, this->data);
+        std::copy(input, input + inputSize, data);
     }
-    MyContainer(const MyContainer& container) : size(container.size), capacity(container.capacity) {
+    MyContainer(const MyContainer& other)
+        : size(other.size), capacity(other.capacity) {
         data = new T[capacity]{};
-        std::copy(container.data, container.data + container.size, this->data);
+        std::copy(other.data, other.data + other.size, data);
     }
-    MyContainer(MyContainer&& container) noexcept : data(container.data), size(container.size),  capacity(container.capacity) {
-        container.data = nullptr;
-        container.size = 0;
-        container.capacity = 0;
+    MyContainer(MyContainer&& other) noexcept
+        : data(other.data), size(other.size), capacity(other.capacity) {
+        other.data = nullptr;
+        other.size = other.capacity = 0;
     }
     ~MyContainer() {
         delete[] data;
     }
 
-    MyContainer& operator=(const MyContainer& container) {
-        if (this != &container) {
-            delete[] data;
-            size = container.size;
-            capacity = container.capacity;
-            data = new T[capacity]{};
-            std::copy(container.data, container.data + container.size, this->data);
+    MyContainer& operator=(const MyContainer& other) {
+        if (this != &other) {
+            MyContainer tmp(other);
+            swap(tmp);
         }
         return *this;
     }
-    MyContainer& operator=(MyContainer&& container) noexcept {
-        if (this != &container) {
+    MyContainer& operator=(MyContainer&& other) noexcept {
+        if (this != &other) {
             delete[] data;
-            data = container.data;
-            size = container.size;
-            capacity = container.capacity;
-            container.data = nullptr;
-            container.size = 0;
-            container.capacity = 0;
+            data = other.data;
+            size = other.size;
+            capacity = other.capacity;
+            other.data = nullptr;
+            other.size = other.capacity = 0;
         }
         return *this;
     }
@@ -170,36 +170,35 @@ public:
         data[size++] = std::move(element);
     }
 
+    void swap(MyContainer& other) noexcept {
+        std::swap(data, other.data);
+        std::swap(size, other.size);
+        std::swap(capacity, other.capacity);
+    }
+
     friend std::istream& operator>>(std::istream& is, MyContainer& c) {
         std::string classTag;
         size_t capacity = 0;
         size_t size = 0;
 
-        if (!(is >> classTag)
+        if (!(is >> classTag >> capacity >> size)
             || classTag != "MyContainer"
-            || !(is >> capacity)
-            || !(is >> size)
-            || (capacity < size)) {
+            || capacity < size
+            ) {
             is.setstate(std::ios::failbit);
             return is;
         }
 
-        T* newData = nullptr;
-        if (capacity > 0 && size > 0)
-            newData = new T[capacity];
-
+        MyContainer<T> tmp;
+        tmp.capacity = capacity;
+        tmp.size = size;
+        if (capacity) tmp.data = new T[capacity];
         for (size_t i = 0; i < size; ++i)
-            if (!(is >> newData[i])) {
-                delete[] newData;
+            if (!(is >> tmp.data[i])) {
                 is.setstate(std::ios::failbit);
                 return is;
             }
-
-        delete[] c.data;
-        c.capacity = capacity;
-        c.size = size;
-        c.data = newData;
-        newData = nullptr;
+        c.swap(tmp);
         return is;
     }
 
