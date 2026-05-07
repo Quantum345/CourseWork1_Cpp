@@ -5,6 +5,18 @@
 #include <string>
 #include <utility>
 
+
+Subject::Subject(const std::string& name, unsigned int grade)
+    : name(name), grade(grade) {}
+
+Subject::Subject(const Subject& other)
+    : name(other.name), grade(other.grade) {}
+
+Subject::Subject(Subject&& other) noexcept
+    : name(std::move(other.name)), grade(other.grade) {
+    other.grade = 0;
+}
+
 void Subject::setName(const std::string& value) {
     this->name = value;
 }
@@ -23,20 +35,31 @@ unsigned int Subject::getGrade() const {
     return this->grade;
 }
 
+std::string Subject::getEctsGrade() const {
+    if (grade >= 90) return "A";
+    if (grade >= 83) return "B";
+    if (grade >= 75) return "C";
+    if (grade >= 68) return "D";
+    if (grade >= 50) return "E";
+    if (grade >= 26) return "FX";
+    return "F";
+}
+
+unsigned int Subject::getNationalGrade() const {
+    if (grade >= 90) return 5;
+    if (grade >= 75) return 4;
+    if (grade >= 50) return 3;
+    if (grade >= 25) return 2;
+    return 1;
+}
+
 std::istream& operator>>(std::istream& is, Subject& s) {
     std::string classTag;
     std::string name;
     unsigned int grade = 0;
 
-    if (!(is >> classTag) || classTag != "Subject") {
-        is.setstate(std::ios::failbit);
-        return is;
-    }
-
-    if (!(is >> std::quoted(name)))
-        return is;
-
-    if (!(is >> grade)) {
+    if (!(is >> classTag >> std::quoted(name) >> grade)
+        || classTag != "Subject") {
         is.setstate(std::ios::failbit);
         return is;
     }
