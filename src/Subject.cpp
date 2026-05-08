@@ -17,6 +17,22 @@ Subject::Subject(Subject&& other) noexcept
     other.grade = 0;
 }
 
+Subject& Subject::operator=(const Subject& other) {
+    if (this != &other) {
+        name = other.name;
+        grade = other.grade;
+    }
+    return *this;
+}
+
+Subject& Subject::operator=(Subject&& other) noexcept {
+    if (this != &other) {
+        name = std::move(other.name);
+        grade = other.grade;
+    }
+    return *this;
+}
+
 void Subject::setName(const std::string& value) {
     this->name = value;
 }

@@ -8,10 +8,13 @@ private:
     unsigned int grade = 0;
 public:
     Subject() = default;
-    Subject(const std::string& name, unsigned int grade) {}
+    Subject(const std::string& name, unsigned int grade);
     Subject(const Subject& other);
     Subject(Subject&& other) noexcept;
     ~Subject() = default;
+
+    Subject& operator=(const Subject& other);
+    Subject& operator=(Subject&& other) noexcept;
 
     void setName(const std::string& name);
     void setGrade(unsigned int grade);
