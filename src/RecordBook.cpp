@@ -94,11 +94,11 @@ void RecordBook::setAcademicYear(unsigned int academicYear) {
 }
 
 std::string RecordBook::getStudent() const {
-    return std::string();
+    return this->student;
 }
 
 std::string RecordBook::getUniversity() const {
-    return std::string();
+    return this->university;
 }
 
 unsigned int RecordBook::getAcademicYear() const {
@@ -153,7 +153,7 @@ std::istream& operator>>(std::istream& is, RecordBook& rb) {
 
     rb.student = std::move(student);
     rb.university = std::move(university);
-    rb.academicYear = startYear;
+    rb.startYear = startYear;
     rb.academicYear = academicYear;
     rb.subjects = std::move(subjects);
     return is;
