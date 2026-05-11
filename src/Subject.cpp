@@ -7,7 +7,9 @@
 
 
 Subject::Subject(const std::string& name, unsigned int grade)
-    : name(name), grade(grade) {}
+    : name(name) {
+    setGrade(grade);
+}
 
 Subject::Subject(const Subject& other)
     : name(other.name), grade(other.grade) {}
@@ -81,7 +83,7 @@ std::istream& operator>>(std::istream& is, Subject& s) {
     }
 
     s.name = std::move(name);
-    s.grade = grade;
+    s.setGrade(grade);
     return is;
 }
 
