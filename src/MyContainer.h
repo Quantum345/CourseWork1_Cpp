@@ -114,12 +114,7 @@ public:
         constexpr MyIterator& operator-=(difference_type n) noexcept { m_ptr -= n; return *this; }
         constexpr reference operator[](difference_type n) const noexcept { return m_ptr[n]; }
 
-        friend constexpr bool operator==(const MyIterator& a, const MyIterator& b) noexcept { return a.m_ptr == b.m_ptr; }
-        friend constexpr bool operator!=(const MyIterator& a, const MyIterator& b) noexcept { return a.m_ptr != b.m_ptr; }
-        friend constexpr bool operator<(const MyIterator& a, const MyIterator& b) noexcept { return a.m_ptr < b.m_ptr; }
-        friend constexpr bool operator<=(const MyIterator& a, const MyIterator& b) noexcept { return a.m_ptr <= b.m_ptr; }
-        friend constexpr bool operator>(const MyIterator& a, const MyIterator& b) noexcept { return a.m_ptr > b.m_ptr; }
-        friend constexpr bool operator>=(const MyIterator& a, const MyIterator& b) noexcept { return a.m_ptr >= b.m_ptr; }
+        friend constexpr auto operator<=>(const MyIterator& a, const MyIterator& b) noexcept = default;
 
     private:
         pointer m_ptr;
@@ -144,14 +139,18 @@ public:
     constexpr T* data_ptr() noexcept { return data; }
     constexpr const T* data_ptr() const noexcept { return data; }
 
+    // Without boundary check
     constexpr T& operator[](std::size_t i) noexcept { return data[i]; }
+    // Without boundary check
     constexpr const T& operator[](std::size_t i) const noexcept { return data[i]; }
 
+    // With boundary check
     constexpr T& at(std::size_t i) {
         if (i >= _size)
             throw std::out_of_range("Out of Range Error: index extends beyond the container's size");
         return data[i];
     }
+    // With boundary check
     constexpr const T& at(std::size_t i) const {
         if (i >= _size)
             throw std::out_of_range("Out of Range Error: index extends beyond the container's size");
