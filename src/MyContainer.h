@@ -113,7 +113,7 @@ public:
         constexpr MyIterator& operator+=(difference_type n) noexcept { m_ptr += n; return *this; }
         constexpr MyIterator& operator-=(difference_type n) noexcept { m_ptr -= n; return *this; }
         constexpr reference operator[](difference_type n) const noexcept { return m_ptr[n]; }
-
+            
         friend constexpr auto operator<=>(const MyIterator& a, const MyIterator& b) noexcept = default;
 
     private:
@@ -167,6 +167,36 @@ public:
             _reallocate();
         data[_size++] = std::move(element);
     }
+    
+    iterator erase_at(std::size_t idx) {
+        if (idx >= _size) throw std::out_of_range("Out of Range Error: Invalid index for erase");
+        return erase(begin() + static_cast<difference_type>(idx));
+    }
+    iterator erase(const_iterator pos) {
+        return erase(pos, pos + 1);
+    }
+    // Erase elements in the interval [first, last)
+    iterator erase(const_iterator first, const_iterator last) {
+        auto iFirst = static_cast<std::size_t>(first - cbegin());
+        auto iLast = static_cast<std::size_t>(last - cbegin());
+
+        if (iFirst > iLast || iLast > _size)
+            throw std::out_of_range("Out of Range Error: Invalid erase range");
+
+        const std::size_t count = iLast - iFirst;
+        if (count == 0) return;
+
+        T* destination = data + iFirst;
+        T* source = data + iLast;
+        std::move(source, data + _size, destination);
+
+        for (std::size_t i = _size - count; i < _size; ++i)
+            data[i].~T();
+
+        _size -= count;
+        return iterator(data + iFirst);
+    }
+
 
     void swap(MyContainer& other) noexcept {
         std::swap(data, other.data);
