@@ -12,39 +12,38 @@ template <typename T>
 class MyContainer {
 private:
     T* data = nullptr;
-    std::size_t size = 0;
-    std::size_t capacity = 0;
+    std::size_t _size = 0;
+    std::size_t _capacity = 0;
 
     void _reallocate() {
         if (data == nullptr) {
-            data = new T[++capacity]{};
+            data = new T[++_capacity];
             return;
         }
-        size_t newCapacity = capacity * 2;
-        auto* tmp = new T[newCapacity]{};
-        std::move(data, data + size, tmp);
+        size_t newCapacity = _capacity * 2;
+        T* tmp = new T[newCapacity];
+        std::move(data, data + _size, tmp);
         delete[] data;
         data = tmp;
-        capacity = newCapacity;
-        tmp = nullptr;
+        _capacity = newCapacity;
     }
 
 public:
     MyContainer() = default;
     MyContainer(const T* input, std::size_t inputSize)
-        : size(inputSize), capacity(inputSize) {
-        data = new T[capacity]{};
+        : _size(inputSize), _capacity(inputSize) {
+        data = new T[_capacity]{};
         std::copy(input, input + inputSize, data);
     }
     MyContainer(const MyContainer& other)
-        : size(other.size), capacity(other.capacity) {
-        data = new T[capacity]{};
-        std::copy(other.data, other.data + other.size, data);
+        : _size(other._size), _capacity(other._capacity) {
+        data = new T[_capacity]{};
+        std::copy(other.data, other.data + other._size, data);
     }
     MyContainer(MyContainer&& other) noexcept
-        : data(other.data), size(other.size), capacity(other.capacity) {
+        : data(other.data), _size(other._size), _capacity(other._capacity) {
         other.data = nullptr;
-        other.size = other.capacity = 0;
+        other._size = other._capacity = 0;
     }
     ~MyContainer() {
         delete[] data;
@@ -61,10 +60,10 @@ public:
         if (this != &other) {
             delete[] data;
             data = other.data;
-            size = other.size;
-            capacity = other.capacity;
+            _size = other._size;
+            _capacity = other._capacity;
             other.data = nullptr;
-            other.size = other.capacity = 0;
+            other._size = other._capacity = 0;
         }
         return *this;
     }
@@ -130,17 +129,17 @@ public:
     using const_iterator = MyIterator<true>;
 
     constexpr iterator begin() noexcept { return iterator(data); }
-    constexpr iterator end() noexcept { return iterator(data + size); }
+    constexpr iterator end() noexcept { return iterator(data + _size); }
 
     constexpr const_iterator begin() const noexcept { return const_iterator(data); }
-    constexpr const_iterator end() const noexcept { return const_iterator(data + size); }
+    constexpr const_iterator end() const noexcept { return const_iterator(data + _size); }
 
     constexpr const_iterator cbegin() const noexcept { return begin(); }
     constexpr const_iterator cend() const noexcept { return end(); }
 
-    constexpr std::size_t getSize() const noexcept { return size; }
-    constexpr std::size_t getCapacity() const noexcept { return capacity; }
-    constexpr bool isEmpty() const noexcept { return size == 0; }
+    constexpr std::size_t getSize() const noexcept { return _size; }
+    constexpr std::size_t getCapacity() const noexcept { return _capacity; }
+    constexpr bool isEmpty() const noexcept { return _size == 0; }
 
     constexpr T* data_ptr() noexcept { return data; }
     constexpr const T* data_ptr() const noexcept { return data; }
@@ -149,31 +148,31 @@ public:
     constexpr const T& operator[](std::size_t i) const noexcept { return data[i]; }
 
     constexpr T& at(std::size_t i) {
-        if (i >= size)
+        if (i >= _size)
             throw std::out_of_range("Out of Range Error: index extends beyond the container's size");
         return data[i];
     }
     constexpr const T& at(std::size_t i) const {
-        if (i >= size)
+        if (i >= _size)
             throw std::out_of_range("Out of Range Error: index extends beyond the container's size");
         return data[i];
     }
 
-    constexpr void add(const T& element) {
-        if (size == capacity)
+    void add(const T& element) {
+        if (_size == _capacity)
             _reallocate();
-        data[size++] = element;
+        data[_size++] = element;
     }
-    constexpr void add(T&& element) {
-        if (size == capacity)
+    void add(T&& element) {
+        if (_size == _capacity)
             _reallocate();
-        data[size++] = std::move(element);
+        data[_size++] = std::move(element);
     }
 
     void swap(MyContainer& other) noexcept {
         std::swap(data, other.data);
-        std::swap(size, other.size);
-        std::swap(capacity, other.capacity);
+        std::swap(_size, other._size);
+        std::swap(_capacity, other._capacity);
     }
 
     friend std::istream& operator>>(std::istream& is, MyContainer& c) {
@@ -190,8 +189,8 @@ public:
         }
 
         MyContainer<T> tmp;
-        tmp.capacity = capacity;
-        tmp.size = size;
+        tmp._capacity = capacity;
+        tmp._size = size;
         if (capacity) tmp.data = new T[capacity];
         for (size_t i = 0; i < size; ++i)
             if (!(is >> tmp.data[i])) {
@@ -204,9 +203,9 @@ public:
 
     friend std::ostream& operator<<(std::ostream& os, const MyContainer& c) {
         os << "MyContainer "
-            << c.capacity << ' '
-            << c.size;
-        if (c.size == 0 || c.data == nullptr)
+            << c._capacity << ' '
+            << c._size;
+        if (c._size == 0 || c.data == nullptr)
             return os;
         for (auto const& i : c)
             os << ' ' << i;
