@@ -61,6 +61,13 @@ MyContainer<RecordBook> SemesterBook::getRetakingCourseStudents() const {
     return result;
 }
 
+double SemesterBook::getAverageRating() const {
+    double sum = 0.0;
+    for (auto const& rb : recordBooks)
+        rb.getRating();
+    return sum / recordBooks.getSize();
+}
+
 void SemesterBook::add(const RecordBook& rb) {
     recordBooks.add(rb);
 }
