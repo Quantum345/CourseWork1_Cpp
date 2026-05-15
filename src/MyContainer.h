@@ -174,21 +174,21 @@ public:
     
     iterator erase_at(std::size_t idx) {
         if (idx >= _size) throw std::out_of_range("Out of Range Error: Invalid index for erase");
-        return erase(begin() + static_cast<difference_type>(idx));
+        return erase(begin() + static_cast<MyIterator<false>::difference_type>(idx));
     }
-    iterator erase(const_iterator pos) {
+    iterator erase(iterator pos) {
         return erase(pos, pos + 1);
     }
     // Erase elements in the interval [first, last)
-    iterator erase(const_iterator first, const_iterator last) {
-        auto iFirst = static_cast<std::size_t>(first - cbegin());
-        auto iLast = static_cast<std::size_t>(last - cbegin());
+    iterator erase(iterator first, iterator last) {
+        auto iFirst = static_cast<std::size_t>(first - begin());
+        auto iLast = static_cast<std::size_t>(last - begin());
 
         if (iFirst > iLast || iLast > _size)
             throw std::out_of_range("Out of Range Error: Invalid erase range");
 
         const std::size_t count = iLast - iFirst;
-        if (count == 0) return;
+        if (count == 0) return iterator(data + iFirst);
 
         T* destination = data + iFirst;
         T* source = data + iLast;
