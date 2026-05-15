@@ -7,6 +7,7 @@
 #include <utility>
 #include <string>
 #include <exception>
+#include <initializer_list>
 
 template <typename T>
 class MyContainer {
@@ -34,6 +35,9 @@ public:
         : _size(inputSize), _capacity(inputSize) {
         data = new T[_capacity]{};
         std::copy(input, input + inputSize, data);
+    }
+    MyContainer(std::initializer_list<T> ilist) {
+        for (const T& v : ilist) add(v);
     }
     MyContainer(const MyContainer& other)
         : _size(other._size), _capacity(other._capacity) {
