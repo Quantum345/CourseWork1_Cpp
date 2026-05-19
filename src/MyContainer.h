@@ -17,14 +17,12 @@ private:
     std::size_t _capacity = 0;
 
     void _reallocate() {
-        if (data == nullptr) {
-            data = new T[++_capacity];
-            return;
-        }
-        size_t newCapacity = _capacity * 2;
+        std::size_t newCapacity = (_capacity == 0) ? 1 : _capacity * 2;
         T* tmp = new T[newCapacity];
+        if (data) {
         std::move(data, data + _size, tmp);
         delete[] data;
+        }
         data = tmp;
         _capacity = newCapacity;
     }
@@ -33,16 +31,20 @@ public:
     MyContainer() = default;
     MyContainer(const T* input, std::size_t inputSize)
         : _size(inputSize), _capacity(inputSize) {
+        if (input != nullptr && inputSize != 0) {
         data = new T[_capacity]{};
         std::copy(input, input + inputSize, data);
+    }
     }
     MyContainer(std::initializer_list<T> ilist) {
         for (const T& v : ilist) add(v);
     }
     MyContainer(const MyContainer& other)
         : _size(other._size), _capacity(other._capacity) {
+        if (other.data != nullptr && other._capacity != 0) {
         data = new T[_capacity]{};
         std::copy(other.data, other.data + other._size, data);
+    }
     }
     MyContainer(MyContainer&& other) noexcept
         : data(other.data), _size(other._size), _capacity(other._capacity) {
