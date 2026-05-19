@@ -112,6 +112,10 @@ unsigned int Book::getYear() const {
     return this->year;
 }
 
+void Book::printId(std::ostream& os) const {
+    os << "УДК " << getUdcCode();
+}
+
 std::istream& operator>>(std::istream& is, Book& b) {
     std::string classTag;
     std::string author;

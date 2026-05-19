@@ -52,6 +52,8 @@ public:
     float getRating() const;
     int getSubjectGrade(const std::string& subjectName) const;
 
+    void printId(std::ostream& os) const override;
+
     void addSubject(const Subject&);
     void addSubject(Subject&&);
 

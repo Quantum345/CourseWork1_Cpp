@@ -49,6 +49,8 @@ public:
     std::string getPublishingHouse() const;
     unsigned int getYear() const;
 
+    virtual void printId(std::ostream& os) const;
+
     friend std::istream& operator>>(std::istream& is, Book& b);
     friend std::ostream& operator<<(std::ostream& os, const Book& b);
 };

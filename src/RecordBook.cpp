@@ -127,6 +127,10 @@ int RecordBook::getSubjectGrade(const std::string& subjectName) const {
     return -1;
 }
 
+void RecordBook::printId(std::ostream& os) const {
+    os << "Номер залікової книги: " << startYear << "-" << student;
+}
+
 void RecordBook::addSubject(const Subject& s) {
     subjects.add(s);
 }
