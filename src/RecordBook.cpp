@@ -46,7 +46,7 @@ RecordBook::RecordBook(const RecordBook& rb)
     subjects(rb.subjects) {}
 
 RecordBook::RecordBook(RecordBook&& rb) noexcept
-    : Book(rb),
+    : Book(std::move(rb)),
     student(std::move(rb.student)),
     university(std::move(rb.university)),
     startYear(rb.startYear),
