@@ -1,13 +1,14 @@
 #pragma once
-#include <algorithm>
 #include <iostream>
+#include <istream>
+#include <algorithm>
 #include <iterator>
 #include <stdexcept>
 #include <type_traits>
 #include <utility>
-#include <string>
 #include <exception>
 #include <initializer_list>
+#include <memory>
 
 template <typename T>
 class MyContainer {
@@ -20,8 +21,8 @@ private:
         std::size_t newCapacity = (_capacity == 0) ? 1 : _capacity * 2;
         T* tmp = new T[newCapacity];
         if (data) {
-        std::move(data, data + _size, tmp);
-        delete[] data;
+            std::move(data, data + _size, tmp);
+            delete[] data;
         }
         data = tmp;
         _capacity = newCapacity;
@@ -32,9 +33,9 @@ public:
     MyContainer(const T* input, std::size_t inputSize)
         : _size(inputSize), _capacity(inputSize) {
         if (input != nullptr && inputSize != 0) {
-        data = new T[_capacity]{};
-        std::copy(input, input + inputSize, data);
-    }
+            data = new T[_capacity]{};
+            std::copy(input, input + inputSize, data);
+        }
     }
     MyContainer(std::initializer_list<T> ilist) {
         for (const T& v : ilist) add(v);
@@ -42,9 +43,9 @@ public:
     MyContainer(const MyContainer& other)
         : _size(other._size), _capacity(other._capacity) {
         if (other.data != nullptr && other._capacity != 0) {
-        data = new T[_capacity]{};
-        std::copy(other.data, other.data + other._size, data);
-    }
+            data = new T[_capacity]{};
+            std::copy(other.data, other.data + other._size, data);
+        }
     }
     MyContainer(MyContainer&& other) noexcept
         : data(other.data), _size(other._size), _capacity(other._capacity) {
@@ -119,7 +120,7 @@ public:
         constexpr MyIterator& operator+=(difference_type n) noexcept { m_ptr += n; return *this; }
         constexpr MyIterator& operator-=(difference_type n) noexcept { m_ptr -= n; return *this; }
         constexpr reference operator[](difference_type n) const noexcept { return m_ptr[n]; }
-            
+
         friend constexpr auto operator<=>(const MyIterator& a, const MyIterator& b) noexcept = default;
 
     private:
@@ -173,7 +174,7 @@ public:
             _reallocate();
         data[_size++] = std::move(element);
     }
-    
+
     iterator erase_at(std::size_t idx) {
         if (idx >= _size) throw std::out_of_range("Out of Range Error: Invalid index for erase");
         return erase(begin() + static_cast<MyIterator<false>::difference_type>(idx));

@@ -1,9 +1,6 @@
-#include "Book.h"
 #include <iomanip>
-#include <string>
-#include <iostream>
-#include "UdcCode.h"
 #include <utility>
+#include "Book.h"
 
 Book::Book() = default;
 

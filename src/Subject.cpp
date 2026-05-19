@@ -1,9 +1,7 @@
-#include "Subject.h"
 #include <stdexcept>
 #include <iomanip>
-#include <iostream>
-#include <string>
 #include <utility>
+#include "Subject.h"
 
 
 Subject::Subject(const std::string& name, unsigned int grade)
