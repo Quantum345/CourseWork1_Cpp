@@ -50,6 +50,9 @@ public:
     unsigned int getYear() const;
 
     virtual void printId(std::ostream& os) const;
+    bool matchesName(const std::string& substring) const;
+    bool matchesAuthor(const std::string& a) const;
+    bool matchesPublishingHouse(const std::string& ph) const;
 
     friend std::istream& operator>>(std::istream& is, Book& b);
     friend std::ostream& operator<<(std::ostream& os, const Book& b);

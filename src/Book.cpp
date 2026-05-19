@@ -116,6 +116,18 @@ void Book::printId(std::ostream& os) const {
     os << "УДК " << getUdcCode();
 }
 
+bool Book::matchesName(const std::string& substring) const {
+    return name.find(substring) != std::string::npos;
+}
+
+bool Book::matchesAuthor(const std::string& substring) const {
+    return author.find(substring) != std::string::npos;
+}
+
+bool Book::matchesPublishingHouse(const std::string& substring) const {
+    return publishingHouse.find(substring) != std::string::npos;
+}
+
 std::istream& operator>>(std::istream& is, Book& b) {
     std::string classTag;
     std::string author;
