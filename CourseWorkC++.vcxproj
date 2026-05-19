@@ -134,6 +134,7 @@
     <ClCompile Include="src\SemesterBook.cpp" />
     <ClCompile Include="src\Subject.cpp" />
     <ClCompile Include="src\UdcCode.cpp" />
+    <ClCompile Include="src\UiLogic.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Book.h" />
@@ -142,6 +143,7 @@
     <ClInclude Include="src\Subject.h" />
     <ClInclude Include="src\RecordBook.h" />
     <ClInclude Include="src\UdcCode.h" />
+    <ClInclude Include="src\UiLogic.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
