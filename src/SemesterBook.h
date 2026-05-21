@@ -27,6 +27,7 @@ public:
     unsigned int getYear() const;
     MyContainer<RecordBook> getRecordBooks() const;
     MyContainer<RecordBook> getRetakingCourseStudents() const;
+    size_t getRecordBooksAmount() const;
     // Returns average rating of all record books
     double getAverageRating() const;
 
