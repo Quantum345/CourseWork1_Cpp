@@ -110,7 +110,7 @@ unsigned int Book::getYear() const {
 }
 
 void Book::printId(std::ostream& os) const {
-    os << "УДК " << getUdcCode();
+    os << "УДК " << getUdcCode().getCode();
 }
 
 bool Book::matchesName(const std::string& substring) const {
