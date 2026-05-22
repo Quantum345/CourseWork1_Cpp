@@ -15,9 +15,9 @@ public:
     UdcCode& operator=(const UdcCode& udcCode);
     UdcCode& operator=(UdcCode&& udcCode) noexcept;
 
-    void setUdcCode(const std::string& code);
+    void setCode(const std::string& code);
 
-    std::string getUdcCode() const;
+    std::string getCode() const;
 
     friend std::istream& operator>>(std::istream& is, UdcCode& udcCode);
     friend std::ostream& operator<<(std::ostream& os, const UdcCode& udcCode);

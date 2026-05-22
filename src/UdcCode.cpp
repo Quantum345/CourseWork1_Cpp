@@ -24,11 +24,11 @@ UdcCode& UdcCode::operator=(UdcCode&& udcCode) noexcept {
     return *this;
 }
 
-void UdcCode::setUdcCode(const std::string& code) {
+void UdcCode::setCode(const std::string& code) {
     this->code = code;
 }
 
-std::string UdcCode::getUdcCode() const {
+std::string UdcCode::getCode() const {
     return this->code;
 }
 
@@ -42,7 +42,7 @@ std::istream& operator>>(std::istream& is, UdcCode& udcCode) {
         return is;
     }
 
-    udcCode.setUdcCode(code);
+    udcCode.setCode(code);
     return is;
 }
 
