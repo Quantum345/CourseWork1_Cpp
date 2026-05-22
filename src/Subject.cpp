@@ -39,7 +39,8 @@ void Subject::setName(const std::string& value) {
 
 void Subject::setGrade(unsigned int value) {
     if (value > 100)
-        throw std::invalid_argument("Invalid argument: the grade value must be in range from 0 to 100.");
+        throw std::invalid_argument(
+            "Invalid argument: the grade value must be in range from 0 to 100.");
     this->grade = value;
 }
 
