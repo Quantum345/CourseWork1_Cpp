@@ -22,11 +22,11 @@ struct MenuItem {
 
 int getChoice(const MyContainer<MenuItem>& items) {
     for (size_t i = 0; i < items.getSize(); ++i)
-        std::cout << i << ") " << items[i].label << '\n';
+        std::cout << "[" << i << "] " << items[i].label << '\n';
 
-    std::cout << "Перейти до: ";
+    std::cout << ">>> ";
     int choice;
-    if (!(std::cin >> choice) || choice < 0 || static_cast<size_t>(choice) >= items.getSize()) {
+    if (!(std::cin >> choice) || choice < 0 || choice >= items.getSize()) {
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         return -1;
@@ -34,27 +34,36 @@ int getChoice(const MyContainer<MenuItem>& items) {
     return choice;
 }
 
-void runMenu(const MyContainer<MenuItem>& menu, const std::string& title = "") {
+void runMenu(
+    const MyContainer<MenuItem>& menu,
+    const std::string& title = "",
+    const MyContainer<std::string>& parents = {}
+) {
+    MyContainer<std::string> path = parents;
+    if (!title.empty())
+        path.add(title);
+
     while (true) {
-        if (!title.empty())
-            std::cout << "\n=== " << title << " ===\n";
+        if (!path.isEmpty()) {
+            std::cout << "\n[" << path[0];
+            for (size_t i = 1; i < path.getSize(); ++i)
+                std::cout << "] > [" << path[i];
+            std::cout << "]\n";
+        }
 
         int choice = getChoice(menu);
         if (choice == -1) {
-            std::cout << "Неправильна опція.\n";
+            std::cout << "Вказаний номер пункту відсутній\n";
             continue;
         }
-
         const MenuItem& item = menu[choice];
 
         if (choice == 0)
             break;
-
         if (item.action)
             item.action();
-
         if (!item.submenu.isEmpty())
-            runMenu(item.submenu, item.label);
+            runMenu(item.submenu, item.label, path);
     }
 }
 
@@ -101,9 +110,8 @@ const MyContainer rootMenu{
     }}
 };
 
-int main()
-{
-    std::cout << "Курсова робота\nВаріант 14\n\n";
+int main() {
+    std::cout << "Курсова робота\nВаріант 14\n";
     runMenu(rootMenu, "Головне меню");
     return 0;
 }
