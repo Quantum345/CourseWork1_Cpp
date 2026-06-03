@@ -103,7 +103,7 @@ size_t RecordBook::getSubjectsAmount() const {
     return this->subjects.getSize();
 }
 
-MyContainer<Subject> RecordBook::getSubjects() const {
+const MyContainer<Subject>& RecordBook::getSubjects() const {
     return this->subjects;
 }
 

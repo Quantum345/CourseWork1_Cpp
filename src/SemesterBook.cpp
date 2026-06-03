@@ -43,7 +43,7 @@ unsigned int SemesterBook::getYear() const {
     return year;
 }
 
-MyContainer<RecordBook> SemesterBook::getRecordBooks() const {
+const MyContainer<RecordBook>& SemesterBook::getRecordBooks() const {
     return recordBooks;
 }
 

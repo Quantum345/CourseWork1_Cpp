@@ -48,7 +48,7 @@ public:
     std::string getUniversity() const;
     unsigned int getAcademicYear() const;
     size_t getSubjectsAmount() const;
-    MyContainer<Subject> getSubjects() const;
+    const MyContainer<Subject>& getSubjects() const;
     float getRating() const;
     int getSubjectGrade(const std::string& subjectName) const;
 
